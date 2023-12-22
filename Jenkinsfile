@@ -43,7 +43,7 @@ pipeline {
         stage('Package application') {
             agent {
                 docker {
-                    image 'maven:3-openjdk-17-slim'
+                    image 'maven:3.8.7-openjdk-18-slim'
                     args '-v $HOME/.m2:/root/.m2'
                     reuseNode true
                 }
