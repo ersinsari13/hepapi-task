@@ -1,3 +1,26 @@
+* Launch the jenkins server using `msp-9-jenkins-server-tf-template` folder.
+
+* After launch we will go on jenkins server. So, clone the project repo to the jenkins server.
+
+```bash
+git clone https://[github username]:[your-token]@github.com/[your-git-account]/[your-repo-name-petclinic-microservices-with-db.git
+```
+
+* Get the initial administrative password.
+
+``` bash
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+```
+
+* Enter the temporary password to unlock the Jenkins.
+
+* Install suggested plugins.
+
+* Create first admin user.
+
+* Open your Jenkins dashboard and navigate to `Manage Jenkins` >> `Manage Plugins` >> `Available` tab
+
+* Search and select `GitHub Integration`,  `Docker`,  `Docker Pipeline`, plugins, then click `Install without restart`. Note: No need to install the other `Git plugin` which is already installed can be seen under `Installed` tab.
 ### Set up a Helm v3 chart repository in Amazon S3
 
 * This pattern helps you to manage Helm v3 charts efficiently by integrating the Helm v3 repository into Amazon Simple Storage Service (Amazon S3) on the Amazon Web Services (AWS) Cloud. 

@@ -43,8 +43,7 @@ pipeline {
         stage('Package application') {
             steps {
                 echo 'Packaging the app into jars with maven'
-                sh 'chmod +x mvnw'
-                sh "./mvnw clean package"
+                sh ". ./jenkins/package-with-maven-container.sh"
             }
         }
         stage('Prepare Tags for Docker Images') {
