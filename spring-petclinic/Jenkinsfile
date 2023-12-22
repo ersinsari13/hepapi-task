@@ -27,7 +27,7 @@ pipeline {
                 }
             }
         }
-        stage(Init S3 to Helm repo) {
+        stage('Init S3 to Helm repo') {
             steps {
                 echo 'İnit helm repo jenkins user'
                 sh '''
