@@ -43,7 +43,7 @@ pipeline {
         stage('Package application') {
             steps {
                 echo 'Packaging the app into jars with maven'
-                sh ". ./jenkins/package-with-maven-container.sh"
+                sh "./mvnw clean package"
             }
         }
         stage('Prepare Tags for Docker Images') {
