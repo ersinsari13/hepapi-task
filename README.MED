@@ -121,7 +121,7 @@ kubectl version --short --client
 - Switch user to jenkins for creating eks cluster. Execute following commands as `jenkins` user.
 
 ```bash
-sudo su - jenkins
+sudo su - jenkins -s /bin/bash
 ```
 
 - Create a `cluster.yaml` file under `/var/lib/jenkins` folder.

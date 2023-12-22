@@ -6,9 +6,6 @@ pipeline {
         AWS_ACCOUNT_ID=sh(script:'aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
         AWS_REGION="us-east-1"
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-        ANS_KEYPAIR="${APP_NAME}-prod-${BUILD_NUMBER}.key"
-        ANSIBLE_PRIVATE_KEY_FILE="${WORKSPACE}/${ANS_KEYPAIR}"
-        ANSIBLE_HOST_KEY_CHECKING="False"
     }
     stages {
         stage('Check S3 Bucket') {

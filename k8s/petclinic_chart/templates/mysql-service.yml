@@ -7,4 +7,4 @@ metadata:
 spec:
 spec:
   type: ExternalName
-  externalName: ######
+  externalName: petclinic.cxnbjlhzetkj.us-east-1.rds.amazonaws.com
