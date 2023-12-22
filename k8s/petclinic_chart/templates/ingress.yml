@@ -10,7 +10,7 @@ spec:
         paths:
           - backend:
               service:
-                name: api-gateway
+                name: petclinic-service
                 port:
                   number: 8080
             path: /
