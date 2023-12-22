@@ -41,15 +41,9 @@ pipeline {
                 }
         }
         stage('Package application') {
-            agent {
-                docker {
-                    image 'maven:3.9.5-amazoncorretto-17'
-                    args '-v $HOME/.m2:/root/.m2'
-                    reuseNode true
-                }
-            }
             steps {
-                sh 'mvn clean package'
+                echo 'Packaging the app into jars with maven'
+                sh ". ./jenkins/package-with-maven-container.sh"
             }
         }
         stage('Prepare Tags for Docker Images') {
