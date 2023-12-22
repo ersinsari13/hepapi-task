@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  mysql-server:
+    image: mysql:8.2
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_USER: petclinic
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      MYSQL_DATABASE: petclinic
+    secrets:
+      - mysql_root_password
+      - mysql_password
+    networks:
+      - petnet
+
+  petclinic:
+    image: ersin/petclinic
+    restart: always
+    depends_on:
+      - mysql-server
+    ports:
+      - "8080:8080"
+    networks:
+      - petnet
+
+networks:
+    petnet:
+
+secrets:
+  mysql_root_password:
+    file: mysql_root_password.txt
+  mysql_password:
+    file: mysql_password.txt
