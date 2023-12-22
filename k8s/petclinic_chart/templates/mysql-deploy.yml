@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-db
+  template:
+    metadata:
+      labels:
+        app: mysql-db
+    spec:
+      containers:
+      - name: mysql-db
+        image: mysql:8.2
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: Jj123456
+        - name: MYSQL_USER
+          value: petclinic 
+        - name: MYSQL_PASSWORD
+          value: petclinic
+        - name: MYSQL_DATABASE
+          value: petclinic
+        resources: {}
