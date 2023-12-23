@@ -13,9 +13,11 @@ services:
       - mysql_password
     networks:
       - petnet
+    volumes:
+      - mysql-data:/var/lib/mysql
 
   petclinic:
-    image: ersin/petclinic
+    image: ersinsari/hepapi-petclinic
     restart: always
     depends_on:
       - mysql-server
@@ -32,3 +34,5 @@ secrets:
     file: mysql_root_password.txt
   mysql_password:
     file: mysql_password.txt
+volumes:
+  mysql-data
