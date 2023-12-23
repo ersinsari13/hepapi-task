@@ -18,12 +18,12 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 * Create first admin user.
 
-* Open your Jenkins dashboard and navigate to `Manage Jenkins` >> `Manage Plugins` >> `Available` tab
+* Open your Jenkins dashboard and navigate to `Manage Jenkins` >> `Plugins` >> `Available` tab
 
 * Search and select `GitHub Integration`,  `Docker`,  `Docker Pipeline`, plugins, then click `Install without restart`. Note: No need to install the other `Git plugin` which is already installed can be seen under `Installed` tab.
 ### Set up a Helm v3 chart repository in Amazon S3
 
-* This pattern helps you to manage Helm v3 charts efficiently by integrating the Helm v3 repository into Amazon Simple Storage Service (Amazon S3) on the Amazon Web Services (AWS) Cloud. 
+* This pattern helps us to manage Helm v3 charts efficiently by integrating the Helm v3 repository into Amazon Simple Storage Service (Amazon S3) on the Amazon Web Services (AWS) Cloud. 
 (https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/set-up-a-helm-v3-chart-repository-in-amazon-s3.html)
 
 ```
@@ -55,7 +55,7 @@ AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-ersin/stable/myapp
 * Verify that the ``index.yaml`` file was created.
 
 ```bash
-aws s3 ls s3://petclinic-helm-charts-<put-your-name>/stable/myapp/
+aws s3 ls s3://petclinic-helm-charts-ersin/stable/myapp/
 ```
 
 * Add the Amazon S3 repository to Helm on the client machine. 
@@ -149,3 +149,41 @@ eksctl create cluster -f cluster.yaml
 export PATH=$PATH:$HOME/bin
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
 ```
+### Install EBS CSI Driver
+- Create IAM Policy for EBS
+- Associate IAM Policy to Worker Node IAM Role
+- Install EBS CSI Driver
+
+Create IAM Policy for EBS
+  - Go to Services -> IAM
+  - Create a Policy
+  - Select JSON tab and copy paste the below JSON
+```bash
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:AttachVolume",
+        "ec2:CreateSnapshot",
+        "ec2:CreateTags",
+        "ec2:CreateVolume",
+        "ec2:DeleteSnapshot",
+        "ec2:DeleteTags",
+        "ec2:DeleteVolume",
+        "ec2:DescribeInstances",
+        "ec2:DescribeSnapshots",
+        "ec2:DescribeTags",
+        "ec2:DescribeVolumes",
+        "ec2:DetachVolume"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+```
+- Click on Review Policy
+- Name: Amazon_EBS_CSI_Driver
+- Description: Policy for EC2 Instances to access Elastic Block Store
+- Click on Create Policy

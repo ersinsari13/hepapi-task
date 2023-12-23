@@ -5,6 +5,10 @@ metadata:
   labels:
     name: mysql-server
 spec:
-spec:
-  type: ExternalName
-  externalName: database-1.cxnbjlhzetkj.us-east-1.rds.amazonaws.com
+  type: ClusterIP
+  selector:
+    app: mysql-db
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
