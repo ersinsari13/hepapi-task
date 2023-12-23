@@ -1,4 +1,7 @@
-* Launch the jenkins server using `msp-9-jenkins-server-tf-template` folder.
+### Spring-Petclinic (Ersin Sari)
+- Jenkins Server
+
+* Launch the jenkins server using `jenkins-server-tf-template` folder.
 
 * After launch we will go on jenkins server. So, clone the project repo to the jenkins server.
 
@@ -20,7 +23,7 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 
 * Open your Jenkins dashboard and navigate to `Manage Jenkins` >> `Plugins` >> `Available` tab
 
-* Search and select `GitHub Integration`,  `Docker`,  `Docker Pipeline`, plugins, then click `Install without restart`. Note: No need to install the other `Git plugin` which is already installed can be seen under `Installed` tab.
+* Search and select `GitHub Integration`,  `Docker`,  `Docker Pipeline`, `Email Extension` plugins, then click `Install without restart`. Note: No need to install the other `Git plugin` which is already installed can be seen under `Installed` tab.
 ### Set up a Helm v3 chart repository in Amazon S3
 
 * This pattern helps us to manage Helm v3 charts efficiently by integrating the Helm v3 repository into Amazon Simple Storage Service (Amazon S3) on the Amazon Web Services (AWS) Cloud. 
@@ -149,12 +152,13 @@ eksctl create cluster -f cluster.yaml
 export PATH=$PATH:$HOME/bin
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
 ```
-### Install EBS CSI Driver
+### Install EBS CSI Driver on AWS EKS Cluster
+
 - Create IAM Policy for EBS
 - Associate IAM Policy to Worker Node IAM Role
 - Install EBS CSI Driver
 
-Create IAM Policy for EBS
+# Create IAM Policy for EBS
   - Go to Services -> IAM
   - Create a Policy
   - Select JSON tab and copy paste the below JSON
@@ -187,3 +191,27 @@ Create IAM Policy for EBS
 - Name: Amazon_EBS_CSI_Driver
 - Description: Policy for EC2 Instances to access Elastic Block Store
 - Click on Create Policy
+
+Get the IAM role Worker Nodes using and Associate this policy to that role
+# Get Worker node IAM Role ARN
+
+```bash
+# Get Worker node IAM Role ARN
+kubectl -n kube-system describe configmap aws-auth
+
+# from output check rolearn
+rolearn: arn:aws:iam::180789647333:role/eksctl-eksdemo1-nodegroup-eksdemo-NodeInstanceRole-IJN07ZKXAWNN
+```
+- Go to Services -> IAM -> Roles - Search for role with name eksctl-eksdemo1-nodegroup and open it - Click on Permissions tab - Click on Attach Policies - Search for Amazon_EBS_CSI_Driver and click on Attach Policy
+
+# Deploy Amazon EBS CSI Driver
+
+* Deploy Amazon EBS CSI Driver
+
+```bash
+# Deploy EBS CSI Driver
+kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernetes/overlays/stable/?ref=master"
+
+# Verify ebs-csi pods running
+kubectl get pods -n kube-system
+```
