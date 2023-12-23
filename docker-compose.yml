@@ -35,4 +35,4 @@ secrets:
   mysql_password:
     file: mysql_password.txt
 volumes:
-  mysql-data
+  mysql-data:
