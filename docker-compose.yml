@@ -20,7 +20,7 @@ services:
     depends_on:
       - mysql-server
     ports:
-      - "8080:8080"
+      - "9090:8080"
     networks:
       - petnet
 
