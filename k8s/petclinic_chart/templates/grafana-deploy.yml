@@ -12,11 +12,6 @@ spec:
   strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.yml -o petclinic_chart/templates
-        kompose.image-pull-secret: regcred
-        kompose.version: 1.31.2 (a92241f79)
-      creationTimestamp: null
       labels:
         io.kompose.network/k8s-default: "true"
         io.kompose.service: grafana-server
