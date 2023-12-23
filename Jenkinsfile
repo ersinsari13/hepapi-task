@@ -81,7 +81,6 @@ pipeline {
         success {
             emailext body: 'Extended E-mail plugin notification test.', subject: 'Test', to: 'sariiersinn13@gmail.com'
             }
-        }
         failure {
             echo 'Delete the Image Repository on ECR due to the Failure'
             sh """
