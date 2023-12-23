@@ -18,6 +18,9 @@ pipeline {
                         echo 'Bucket does not exist. Creating...'
                         sh 'aws s3api create-bucket --bucket petclinic-helm-charts-ersin --region us-east-1'
                         sh 'aws s3api put-object --bucket petclinic-helm-charts-ersin --key stable/myapp/'
+                        sh 'helm plugin install https://github.com/hypnoglow/helm-s3.git'
+                        sh 'AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-ersin/stable/myapp'
+                        sh 'AWS_REGION=us-east-1 helm repo add stable-petclinicapp s3://petclinic-helm-charts-ersin/stable/myapp/'
                     }
                 }
             }
