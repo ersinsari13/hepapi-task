@@ -12,11 +12,9 @@ pipeline {
             steps {
                 script {
                     try {
-                        // AWS CLI ile varlık kontrolü
                         sh 'aws s3api head-bucket --bucket petclinic-helm-charts-ersin --region us-east-1'
                         echo 'Bucket already exists'
                     } catch (Exception e) {
-                        // Bucket yoksa oluştur
                         echo 'Bucket does not exist. Creating...'
                         sh 'aws s3api create-bucket --bucket petclinic-helm-charts-ersin --region us-east-1'
                         sh 'aws s3api put-object --bucket petclinic-helm-charts-ersin --key stable/myapp/'
@@ -72,6 +70,32 @@ pipeline {
                 echo 'Deploying App on Kubernetes Cluster'
                 sh '. ./jenkins/deploy_app_on_prod_environment.sh'
             }
+        }
+    }
+    post {
+        always {
+            echo 'Deleting all local images'
+            sh 'docker image prune -af'
+        }
+
+        success {
+            script {
+                emailext(
+                    subject: "Deployment Successful",
+                    body: "The deployment was successful.",
+                    to: "sariiersinn13@gmail.com",
+                    mimeType: 'text/html'
+                )
+            }
+        }
+        failure {
+            echo 'Delete the Image Repository on ECR due to the Failure'
+            sh """
+                aws ecr delete-repository \
+                  --repository-name ${APP_REPO_NAME} \
+                  --region ${AWS_REGION}\
+                  --force
+                """
         }
     }
 }
