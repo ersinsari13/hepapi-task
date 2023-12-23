@@ -79,13 +79,7 @@ pipeline {
         }
 
         success {
-            script {
-                emailext(
-                    subject: "Deployment Successful",
-                    body: "The deployment was successful.",
-                    to: "sariiersinn13@gmail.com",
-                    mimeType: 'text/html'
-                )
+            emailext body: 'Extended E-mail plugin notification test.', subject: 'Test', to: 'sariiersinn13@gmail.com'
             }
         }
         failure {
