@@ -154,6 +154,41 @@ eksctl create cluster -f cluster.yaml
 export PATH=$PATH:$HOME/bin
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
 ```
+### Configuration for HPA
+
+This yaml file for HPA
+```bash
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: petclinic-deploy
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: petclinic-deploy
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+```
+we need to install kubernetes — metric-server
+
+wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+Then, before running the metric-server file, we add — kubelet-insecure-tls to the conponents.yaml file we downloaded to avoid getting an error when it is necessary to run it without a TLS certificate, as specified in the github documentation.
+
+Then we run the yaml file that will run the metrics-server and after waiting 1–2 minutes, we see that the metrics that were unknow are now properly received.
+
+```bash
+kubectl apply -f components.yaml
+```
+
 ### Install EBS CSI Driver on AWS EKS Cluster
 
 - Create IAM Policy for EBS
