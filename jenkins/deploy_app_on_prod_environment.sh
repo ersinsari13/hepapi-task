@@ -5,5 +5,5 @@ cd /var/lib/jenkins/chart-repo
 helm package /var/lib/jenkins/workspace/petclinic-argocd/k8s/petclinic_chart
 helm repo index .
 git add .
-git commit "petclinic_chart-${BUILD_NUMBER}.tgz added"
+git commit -m "petclinic_chart-${BUILD_NUMBER}.tgz added"
 git push origin dev
