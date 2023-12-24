@@ -8,23 +8,6 @@ pipeline {
         ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
     }
     stages {
-        stage('Check S3 Bucket') {
-            steps {
-                script {
-                    try {
-                        sh 'aws s3api head-bucket --bucket petclinic-helm-charts-ersin --region us-east-1'
-                        echo 'Bucket already exists'
-                    } catch (Exception e) {
-                        echo 'Bucket does not exist. Creating...'
-                        sh 'aws s3api create-bucket --bucket petclinic-helm-charts-ersin --region us-east-1'
-                        sh 'aws s3api put-object --bucket petclinic-helm-charts-ersin --key stable/myapp/'
-                        sh 'helm plugin install https://github.com/hypnoglow/helm-s3.git'
-                        sh 'AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-ersin/stable/myapp'
-                        sh 'AWS_REGION=us-east-1 helm repo add stable-petclinicapp s3://petclinic-helm-charts-ersin/stable/myapp/'
-                    }
-                }
-            }
-        }
         stage('Create ECR Private Repo') {
             steps {
                 echo "Creating ECR Private Repo for ${APP_NAME}"
