@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        APP_NAME="petclinic"
+        APP_NAME="petclinic-argocd"
         APP_REPO_NAME="hepapi/${APP_NAME}-app-prod"
         AWS_ACCOUNT_ID=sh(script:'aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
         AWS_REGION="us-east-1"
