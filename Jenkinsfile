@@ -3,24 +3,13 @@ pipeline {
     environment {
         APP_NAME="petclinic-argocd"
         APP_REPO_NAME="hepapi/${APP_NAME}-app-prod"
-        AWS_ACCOUNT_ID=sh(script:'aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
-        AWS_REGION="us-east-1"
-        ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
     }
     stages {
-        stage('Create ECR Private Repo') {
-            steps {
-                echo "Creating ECR Private Repo for ${APP_NAME}"
-                sh '''
-                aws ecr describe-repositories --repository-name ${APP_REPO_NAME} --region $AWS_REGION || \
-                    aws ecr create-repository \
-                    --repository-name ${APP_REPO_NAME} \
-                    --image-scanning-configuration scanOnPush=true \
-                    --image-tag-mutability MUTABLE \
-                    --region  $AWS_REGION
-                '''
-                }
+
+        stage('Docker login') {
+            docker login
         }
+
         stage('Package application') {
             steps {
                 echo 'Packaging the app into jars with maven'
