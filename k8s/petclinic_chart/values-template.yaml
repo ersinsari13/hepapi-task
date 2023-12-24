@@ -1,2 +1,2 @@
 IMAGE_TAG_PETCLINIC: "${IMAGE_TAG_PETCLINIC}"
-DNS_NAME: "petclinic.ersinsari.com"
+DNS_NAME: "argocd.ersinsari.com"

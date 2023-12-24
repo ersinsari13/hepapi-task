@@ -1,4 +1,6 @@
 ### Spring-Petclinic (Ersin Sari)
+
+# CİCD Pipeline with Jenkins
 - Jenkins Server
 
 * Launch the jenkins server using `jenkins-server-tf-template` folder.
@@ -214,4 +216,38 @@ kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernete
 
 # Verify ebs-csi pods running
 kubectl get pods -n kube-system
+```
+# Ci Pipeline with Jenkins CD Pipeline with ARGOCD
+
+* Install Argo CD on EKS Cluster
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+* Install Helm Chart by using Application.yml
+
+```bash
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: petclinic
+  namespace: argocd
+spec:
+  project: default
+  source:
+    chart: petclinic_chart
+    targetRevision: "4"
+    repoURL: https://raw.githubusercontent.com/ersinsari13/chart-repo/dev
+    helm:
+      releaseName: petclinic
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: myapp
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
 ```
