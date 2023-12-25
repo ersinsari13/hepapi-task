@@ -17,6 +17,13 @@ spec:
         image: '{{ .Values.IMAGE_TAG_PETCLINIC }}'
         ports:
         - containerPort: 8080
+        resources:
+          requests:
+            cpu: 400m
+            memory: 400Mi
+          limits:
+            cpu: 500m
+            500Mi
       initContainers:
         - name: init-mysql
           image: busybox:latest
