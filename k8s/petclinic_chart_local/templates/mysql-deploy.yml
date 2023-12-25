@@ -28,4 +28,4 @@ spec:
       volumes:
         - name: mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: ebs-mysql-pv-claim
+            claimName: mysql-per-vol-claim
