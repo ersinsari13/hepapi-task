@@ -8,10 +8,10 @@ pipeline {
             steps {
                 script {
                     def dockerCredentialsId = 'docker-hub-cred'
-                     withCredentials([usernamePassword(credentialsId: docker-hub-cred, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                       sh '''
+                     withCredentials([usernamePassword(credentialsId: dockerCredentialsId, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                       sh """
                             docker login -u \${DOCKER_USERNAME} -p \${DOCKER_PASSWORD}
-                        '''
+                        """
                      }    
                 }
             }
