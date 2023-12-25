@@ -2,24 +2,19 @@ pipeline {
     agent any
     environment {
         APP_NAME="petclinic-argocd-local"
-        APP_REPO_NAME="hepapi/${APP_NAME}-app-prod"
-        AWS_ACCOUNT_ID=sh(script:'aws sts get-caller-identity --query Account --output text', returnStdout:true).trim()
-        AWS_REGION="us-east-1"
-        ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
     }
     stages {
-        stage('Create ECR Private Repo') {
+        stage('Docker Login') {
             steps {
-                echo "Creating ECR Private Repo for ${APP_NAME}"
-                sh '''
-                aws ecr describe-repositories --repository-name ${APP_REPO_NAME} --region $AWS_REGION || \
-                    aws ecr create-repository \
-                    --repository-name ${APP_REPO_NAME} \
-                    --image-scanning-configuration scanOnPush=true \
-                    --image-tag-mutability MUTABLE \
-                    --region  $AWS_REGION
-                '''
+                script {
+                    def dockerCredentialsId = 'docker-hub-cred'
+                     withCredentials([usernamePassword(credentialsId: docker-hub-cred, passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                       sh '''
+                            docker login -u \${DOCKER_USERNAME} -p \${DOCKER_PASSWORD}
+                        '''
+                     }    
                 }
+            }
         }
         stage('Package application') {
             steps {
@@ -32,7 +27,7 @@ pipeline {
                 echo 'Preparing Tags for Docker Images'
                 script {
                     MVN_VERSION=sh(script:'. ${WORKSPACE}/target/maven-archiver/pom.properties && echo $version', returnStdout:true).trim()
-                    env.IMAGE_TAG_PETCLINIC="${ECR_REGISTRY}/${APP_REPO_NAME}:ersin-petclinic-prod-v${MVN_VERSION}-b${BUILD_NUMBER}"
+                    env.IMAGE_TAG_PETCLINIC="ersinsari/petclinic-prod-local-v${MVN_VERSION}-b${BUILD_NUMBER}"
                 }
             }
         }

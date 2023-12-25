@@ -9,4 +9,4 @@ spec:
     - ReadWriteOnce
   storageClassName: manuel
   hostPath:
-    path: ./data
+    path: /data

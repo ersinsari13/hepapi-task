@@ -17,5 +17,3 @@ spec:
         image: '{{ .Values.IMAGE_TAG_PETCLINIC }}'
         ports:
         - containerPort: 8080
-      imagePullSecrets:
-        - name: regcred
