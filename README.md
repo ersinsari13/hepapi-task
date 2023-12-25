@@ -217,37 +217,36 @@ kubectl apply -k "github.com/kubernetes-sigs/aws-ebs-csi-driver/deploy/kubernete
 # Verify ebs-csi pods running
 kubectl get pods -n kube-system
 ```
-# Ci Pipeline with Jenkins CD Pipeline with ARGOCD
-
-* Install Argo CD on EKS Cluster
-
+### Configuration for HPA
+This yaml file for HPA
 ```bash
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-* Install Helm Chart by using Application.yml
-
-```bash
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
 metadata:
-  name: petclinic
-  namespace: argocd
+  name: petclinic-deploy-hpa
 spec:
-  project: default
-  source:
-    chart: petclinic_chart
-    targetRevision: "4"
-    repoURL: https://raw.githubusercontent.com/ersinsari13/chart-repo/dev
-    helm:
-      releaseName: petclinic
-  destination:
-    server: "https://kubernetes.default.svc"
-    namespace: myapp
-  syncPolicy:
-    syncOptions:
-      - CreateNamespace=true
-    automated:
-      selfHeal: true
-      prune: true
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: petclinic-deploy
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
 ```
+we need to install kubernetes — metric-server
+```bash
+wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+— kubelet-insecure-tls 
+```
+Then, before running the metric-server file, we add — kubelet-insecure-tls to the conponents.yaml file we downloaded to avoid getting an error when it is necessary to run it without a TLS certificate, as specified in the github documentation.
+
+Then we run the yaml file that will run the metrics-server and after waiting 1–2 minutes, we see that the metrics that were unknow are now properly received.
+```bash
+kubectl apply -f components.yaml
+```bash
