@@ -17,3 +17,7 @@ spec:
         image: '{{ .Values.IMAGE_TAG_PETCLINIC }}'
         ports:
         - containerPort: 8080
+      initContainers:
+        - name: init-mysql
+          image: busybox:latest
+          command: ['sh', '-c', 'until nc -z mysql-server:3306; do echo waiting for mysql-server; sleep 2; done;']
