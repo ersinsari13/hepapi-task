@@ -47,7 +47,7 @@ pipeline {
         stage('Package Helm and Push Repo'){
             steps {
                 echo 'Deploying App on Kubernetes Cluster'
-                sh '. ./jenkins/deploy_app_on_prod_environment.sh'
+                sh '. ./jenkins/package_helm.sh'
             }
         }
     }
