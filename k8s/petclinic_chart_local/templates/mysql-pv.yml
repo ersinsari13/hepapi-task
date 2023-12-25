@@ -7,6 +7,5 @@ spec:
     storage: 4Gi
   accessModes:
     - ReadWriteOnce
-  storageClassName: manuel
   hostPath:
     path: /data

@@ -22,10 +22,10 @@ spec:
             name: mysql-secret
         - configMapRef:
             name: mysql-cm
-        volumeMounts:
-            - name: mysql-persistent-storage
-              mountPath: /var/lib/mysql
-      volumes:
-        - name: mysql-persistent-storage
-          persistentVolumeClaim:
-            claimName: mysql-per-vol-claim
+      #   volumeMounts:
+      #       - name: mysql-persistent-storage
+      #         mountPath: /var/lib/mysql
+      # volumes:
+      #   - name: mysql-persistent-storage
+      #     persistentVolumeClaim:
+      #       claimName: mysql-per-vol-claim
