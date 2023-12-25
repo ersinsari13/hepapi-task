@@ -240,10 +240,12 @@ spec:
         averageUtilization: 50
 ```
 we need to install kubernetes — metric-server
+
 ```bash
 wget https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 — kubelet-insecure-tls 
 ```
+
 Then, before running the metric-server file, we add — kubelet-insecure-tls to the conponents.yaml file we downloaded to avoid getting an error when it is necessary to run it without a TLS certificate, as specified in the github documentation.
 
 Then we run the yaml file that will run the metrics-server and after waiting 1–2 minutes, we see that the metrics that were unknow are now properly received.
