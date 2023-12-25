@@ -63,7 +63,7 @@ pipeline {
         }
 
         success {
-            mail bcc: '', body: 'Congrats !!! CICD Pipeline is successfull.', cc: '', from: '', replyTo: '', subject: 'Test Mail', to: 'sariiersinn13@gmail.com'
+            mail bcc: '', body: 'Congrats !!! CI Pipeline is successfull.', cc: '', from: '', replyTo: '', subject: 'Test Mail', to: 'sariiersinn13@gmail.com'
             }
     }
 }
