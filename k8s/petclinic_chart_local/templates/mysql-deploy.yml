@@ -26,6 +26,6 @@ spec:
           - mountPath: /var/lib/mysql
             name: mysql-per-volume
       volumes:
-        - name: db-per-volume
+        - name: mysql-per-volume
           hostPath:
             path: /tmp/host
