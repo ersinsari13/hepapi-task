@@ -27,7 +27,7 @@ pipeline {
                 echo 'Preparing Tags for Docker Images'
                 script {
                     MVN_VERSION=sh(script:'. ${WORKSPACE}/target/maven-archiver/pom.properties && echo $version', returnStdout:true).trim()
-                    env.IMAGE_TAG_PETCLINIC="ersinsari/petclinic-prod-local-v${MVN_VERSION}-b${BUILD_NUMBER}"
+                    env.IMAGE_TAG_PETCLINIC="ersinsari/petclinic-prod-local:${MVN_VERSION}-b${BUILD_NUMBER}"
                 }
             }
         }
