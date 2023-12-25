@@ -52,7 +52,7 @@ pipeline {
         stage('Deploy App on Kubernetes Cluster'){
             steps {
                 echo 'Deploying App on Kubernetes Cluster'
-                sh '. ./jenkins/deploy_app_on_prod_environment.sh'
+                sh '. ./jenkins/helm_package.sh'
             }
         }
     }
