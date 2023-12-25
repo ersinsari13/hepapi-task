@@ -1,6 +1,6 @@
 ### Spring-Petclinic (Ersin Sari)
 
-# CİCD Pipeline with Jenkins
+# Cİ Pipeline with Jenkins
 - Jenkins Server
 
 * Launch the jenkins server using `jenkins-server-tf-template` folder.
@@ -26,51 +26,27 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 * Open your Jenkins dashboard and navigate to `Manage Jenkins` >> `Plugins` >> `Available` tab
 
 * Search and select `GitHub Integration`,  `Docker`,  `Docker Pipeline`, `Email Extension` plugins, then click `Install without restart`. Note: No need to install the other `Git plugin` which is already installed can be seen under `Installed` tab.
-### Set up a Helm v3 chart repository in Amazon S3
 
-* This pattern helps us to manage Helm v3 charts efficiently by integrating the Helm v3 repository into Amazon Simple Storage Service (Amazon S3) on the Amazon Web Services (AWS) Cloud. 
-(https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/set-up-a-helm-v3-chart-repository-in-amazon-s3.html)
+## Part 5 - Set up a Helm v3 chart repository in Github
+- Create a GitHub repo and name it `chart-repo`.
 
-```
 
-* Install the helm-s3 plugin for Amazon S3.
+- Create a GitHub repository in Jenkins User on Jenkins-server and push it.
 
 ```bash
-helm plugin install https://github.com/hypnoglow/helm-s3.git
+mkdir chart-repo
+cd chart-repo
+echo "# chart-repo" >> README.md
+git init
+git add README.md
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/<your github name>/chart-repo.git
+git push -u origin main
 ```
 
-* On some systems we need to install ``Helm S3 plugin`` as Jenkins user to be able to use S3 with pipeline script.
-
-``` bash
-sudo su -s /bin/bash jenkins
-export PATH=$PATH:/usr/local/bin
-helm version
-helm plugin install https://github.com/hypnoglow/helm-s3.git
-exit
-``` 
-
-* ``Initialize`` the Amazon S3 Helm repository.
-
-```bash
-AWS_REGION=us-east-1 helm s3 init s3://petclinic-helm-charts-ersin/stable/myapp 
-```
-
-* The command creates an ``index.yaml`` file in the target to track all the chart information that is stored at that location.
-
-* Verify that the ``index.yaml`` file was created.
-
-```bash
-aws s3 ls s3://petclinic-helm-charts-ersin/stable/myapp/
-```
-
-* Add the Amazon S3 repository to Helm on the client machine. 
-
-```bash
-helm repo ls
-AWS_REGION=us-east-1 helm repo add stable-petclinicapp s3://petclinic-helm-charts-ersin/stable/myapp/
-```
-
-Create a PROD Environment on EKS Cluster
 - ### Install eksctl
 
 - Download and extract the latest release of eksctl with the following command.
@@ -224,6 +200,13 @@ kubectl get pods -n kube-system
 ```bash
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+# access ArgoCD UI
+kubectl get svc -n argocd
+kubectl port-forward svc/argocd-server 8080:443 -n argocd
+
+# login with admin user and below token (as in documentation):
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode && echo
+
 ```
 * Install Helm Chart by using Application.yml
 
@@ -237,7 +220,7 @@ spec:
   project: default
   source:
     chart: petclinic_chart
-    targetRevision: "4"
+    targetRevision: "4" #update your revision number
     repoURL: https://raw.githubusercontent.com/ersinsari13/chart-repo/dev
     helm:
       releaseName: petclinic

@@ -19,3 +19,21 @@ spec:
         - containerPort: 8080
       imagePullSecrets:
         - name: regcred
+          resources:
+            requests:
+              cpu: 400m
+              memory: 400Mi
+            limits:
+              cpu: 500m
+              memory: 500Mi
+      initContainers:
+        - name: init-mysql
+          image: busybox:latest
+          command: ['sh', '-c', 'until nc -z mysql-server:3306; do echo waiting for mysql-server; sleep 2; done;']
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+            limits:
+              cpu: 300m
+              memory: 300Mi
