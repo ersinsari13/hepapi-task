@@ -249,4 +249,4 @@ Then, before running the metric-server file, we add — kubelet-insecure-tls to 
 Then we run the yaml file that will run the metrics-server and after waiting 1–2 minutes, we see that the metrics that were unknow are now properly received.
 ```bash
 kubectl apply -f components.yaml
-```bash
+```
