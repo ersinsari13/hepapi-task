@@ -44,7 +44,7 @@ pipeline {
                 sh ". ./jenkins/push-prod-docker-images-to-ecr.sh"
             }
         }
-        stage('Deploy App on Kubernetes Cluster'){
+        stage('Package Helm and Push Repo'){
             steps {
                 echo 'Deploying App on Kubernetes Cluster'
                 sh '. ./jenkins/deploy_app_on_prod_environment.sh'
