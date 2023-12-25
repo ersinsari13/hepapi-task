@@ -140,6 +140,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
   - Go to Services -> IAM
   - Create a Policy
   - Select JSON tab and copy paste the below JSON
+
 ```bash
 {
   "Version": "2012-10-17",
