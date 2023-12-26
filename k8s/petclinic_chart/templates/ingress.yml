@@ -12,7 +12,7 @@ spec:
         paths:
           - backend:
               service:
-                name: petclinic_service
+                name: petclinic-service
                 port:
                   number: 8080
             path: /
