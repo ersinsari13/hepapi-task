@@ -295,3 +295,42 @@ spec:
       selfHeal: true
       prune: true
 ```
+### Deploying Your Nginx Server for Reverse proxy
+We will configure Nginx as a reverse proxy and build a Docker image for it.
+
+Create a separate folder called custom_nginx.This folder will house your Dockerfile for the Nginx image, and custom Nginx configuration files.
+
+Next, Create a new file called nginx.conf in the custome_nginx folder. This file will hold the custom configurations for your reverse proxy server.
+
+Add this block of code to the nginx.conf file:
+
+```bash
+events { }
+
+http {
+
+  server {
+    listen 8080;
+
+    location / {
+      proxy_pass http://petclinic-service:8080/;
+    }
+  }
+}
+```
+We are basically telling your Nginx server to listen on port 8080, and send any requests that come into the server with the path /flask to the kubernetes flask service http://petclinic-service:8080/ which you are going to set up in your kubernetes cluster.
+
+Next, add the following block of code to your Dockerfile in the custom_nginx folder:
+
+```bash
+FROM nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+```
+The Dockerfile instructs docker to copy your new nginx configuration file and replace the default nginx configuration file with it.
+
+Create, and push us Docker image to DockerHub.
+Finally port-forward to nginx-proxy service
+
+```bash
+kubectl port-forward svc/backend-svc 5000:5000
+```
